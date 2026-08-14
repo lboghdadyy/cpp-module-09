@@ -20,39 +20,17 @@
 // }
 
 
-
-
-
-template	<typename T1, typename T2>
-
-
-void	check_format(std::string &__input)
-{
-	size_t pos = __input.find(" | ", 0);
-	if (pos == std::string::npos)
-		throw (std::runtime_error("Invalid format"));
-	if (__input.find(" | ", pos + 1) != std::string::npos)
-		throw (std::runtime_error("Invalid format"));
-}
-
-template <typename T1, typename T2>
-
-
 int main(int _argCount, char **_argVector)
 {	
-	std::string						_name;
-	
-
 	if (_argCount != 2)
 	{
 		std::cout << "Usage : <Excutable> <Filename.txt>" << std::endl;
 		return (1);
 	}
-	_name = _argVector[1];
 	try
 	{
-		filltheMap(_dataBase);
-		fillInput(_inputTxt, _argVector[1]);
+		BitcoinExchange obj;
+		obj.proccedsTheExchange(_argVector[1]);
 	}
 	catch (const std::exception& e)
 	{

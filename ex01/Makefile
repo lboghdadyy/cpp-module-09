@@ -1,10 +1,10 @@
 CXX = c++ -Wall -Wextra -Werror --std=c++98
 RM=rm -rf
-SOURCES = main.cpp BitcoinExchange.cpp
-HEADERS = BitcoinExchange.hpp
-OBJECTS = $(SOURCES:.cpp=.o)
-NAME = btc
+SOURCES = main.cpp 
 
+OBJECTS = $(SOURCES:.cpp=.o)
+NAME = RPN
+HEADERS = RPN.hpp
 all: $(NAME)
 
 $(NAME): $(OBJECTS)

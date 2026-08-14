@@ -1,16 +1,16 @@
-CXX = c++ -Wall -Wextra -Werror --std=c++98
+CXX = c++ -Wall -Wextra -Werror -std=c++98
 RM=rm -rf
-SOURCES = main.cpp BitcoinExchange.cpp
-HEADERS = BitcoinExchange.hpp
+SOURCES = main.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-NAME = btc
+HEADERS = PmergeMe.hpp
+NAME = PmergeMe
 
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $(NAME)
 
-%.o: %.cpp $(HEADERS)
+%.o: %.cpp .hpp
 	$(CXX) $(CFLAGS) -c $< -o $@
 
 clean:
