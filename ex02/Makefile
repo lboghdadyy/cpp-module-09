@@ -1,16 +1,17 @@
-CXX = c++ -Wall -Wextra -Werror -std=c++98
+CXX = c++ -Wall -Wextra -Werror
 RM=rm -rf
-SOURCES = main.cpp
+SOURCES = main.cpp Pmergeme.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-HEADERS = PmergeMe.hpp
+HEADERS = Pmergeme.hpp
 NAME = PmergeMe
+
 
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $(NAME)
 
-%.o: %.cpp .hpp
+%.o: %.cpp $(HEADERS)
 	$(CXX) $(CFLAGS) -c $< -o $@
 
 clean:
