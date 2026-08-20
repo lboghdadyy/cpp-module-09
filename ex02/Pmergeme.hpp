@@ -11,18 +11,30 @@ using std::make_pair;
 using std::cout;
 using std::endl;
 
-typedef struct s_block {
-    deque<int>  block;
-    int         bigget;
-} t_block;
+// typedef struct s_block {
+//     deque<deque<pair<int, int>>::iterator>  block;
+//     int                                     bigger;
+//     void                                    conBlock(const struct s_block &obj);
+//     void                                    fillBigger(void);
+// } t_block;
 
+// void    t_block::conBlock(const struct s_block &obj) {
+//     for (deque<deque<pair<int, int>>::iterator>::const_iterator it = obj.block.begin(); it != obj.block.end(); it++)
+//         this->block.push_back(*it);
+// }
+
+// void    t_block::fillBigger(void) {
+//     this->bigger = (*(this->block.end() - 1))->second;
+//     cout << "this-> bigger = " << (*(this->block.end() - 1))->second  << endl;
+// }
+
+
+template <typename T>
 class Pmergeme
 {
-    deque<int>                             seq;
-    deque<int>                             biggerElements;
-    int                                    left;
-    deque<pair<int, int> >                 pairs;
-    deque<deque<pair<int, int>>::iterator> order;
+    T       seq;
+    int     leftOver;
+    bool    hasIt = false;
     public:
         Pmergeme();
         Pmergeme(char **input, size_t size);
@@ -32,73 +44,31 @@ class Pmergeme
         void    sort(char **input, size_t size);
         void    swapPairs(int index, int pair, size_t pairSize);
         void    insert(int index, int size, deque<int> &temp);
-        void    makepairs(void);
+        T       makepairs(T seq);
         void    getBigelem(void);
 };
 
-// void    Pmergeme::insert(int index, int size, deque<int> &temp) {
-//     for (int _i = index; _i - index < size; _i++)
-//         temp.push_back(seq[_i]);
-// }
-
-// void    Pmergeme::swapPairs(int index, int pair, size_t pairSize) {
-//     // index = 1
-//     // pair = 2
-//     // pairsize = 4
-//     cout << "before : " << endl;
-//     for (auto &a : seq)
-//         cout << " [" << a << "] ";
-//     cout << endl;
-//     size_t size = seq.size();
-//     deque<int> temp;
-//     for (size_t i = index; i < size; i += pairSize) {
-//         if (i + pair < size && seq[i] > seq[i + pair]) {
-//             insert(i + 1, pair, temp);
-//             insert((i - pair) + 1, pair, temp);
-//         }
-//         else
-//         {
-//             insert((i - pair) + 1, pair, temp);
-//             if (i + pair < size)
-//                 insert(i + 1, pair, temp);
-//         }
-//     }
-//     seq = temp;
-//     cout << "after : " << endl;
-//     for (auto &a : temp)
-//         cout << " [" << a << "] ";
-//     cout << endl;
-//     if (pairSize * 2 <= seq.size())
-//         swapPairs(index + pair, pair * 2, pairSize * 2);
-// }
-
-// void Pmergeme::sort(char **input, size_t size) {
-// }
-
-Pmergeme::Pmergeme(){
+template <typename T>
+Pmergeme<T>::Pmergeme(){
 }
 
 
-
-void    Pmergeme::getBigelem(void) {
-    for (deque<pair<int, int>>::iterator it = pairs.begin(); it != pairs.end(); it++) {
-        biggerElements.push_back(it->second);
-        order.push_back(it);
-    }
-    deque<t_block> blocks;
-    for (deque<int>::iterator it = biggerElements.begin(); it != biggerElements.end(); it++)
-
-}
-
-void    Pmergeme::makepairs(void) {
+template <typename T1>
+T1    Pmergeme<T1>::makepairs(T1 seq) {
     for (size_t i = 0; i + 1 < seq.size(); i+=2)
         pairs.push_back(std::make_pair(std::min(seq[i], seq[i + 1]), std::max(seq[i], seq[i + 1])));
-    for (auto &a : pairs)
-        cout << a.first << " " << a.second << endl;
-    getBigelem();
+    if (seq.size() % 2 != 0) {
+        
+    }
 }
 
-Pmergeme::Pmergeme(char **input, size_t size)
+template <typename T1>
+typename T1::iterator    recSort(T1 &seq) {
+    
+}
+
+template <typename T>
+Pmergeme<T>::Pmergeme(char **input, size_t size)
 {
     if (size % 2 == 0) {
         left = strtod(input[size - 1], NULL);
@@ -114,21 +84,21 @@ Pmergeme::Pmergeme(char **input, size_t size)
         else
             seq.push_back(ll);
     }
-    cout << seq.size() << endl;
-    makepairs();
     // swapPairs(0, 1, 2);
 }
-
-Pmergeme::Pmergeme(const Pmergeme& other){
+template <typename T>
+Pmergeme<T>::Pmergeme(const Pmergeme& other){
     this->seq = other.seq;
 }
 
-Pmergeme& Pmergeme::operator=(const Pmergeme &obj){
+template <typename T>
+Pmergeme<T>& Pmergeme<T>::operator=(const Pmergeme<T> &obj){
     *this = obj;
     return (*this);
 }
 
-Pmergeme::~Pmergeme(){
+template <typename T>
+Pmergeme<T>::~Pmergeme() {
 
 }
 
