@@ -1,4 +1,4 @@
-CXX = c++ -Wall -Wextra -Werror -fsanitize=address -g3
+CXX = c++ -Wall -Wextra -Werror 
 RM=rm -rf
 SOURCES = main.cpp Pmergeme.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
