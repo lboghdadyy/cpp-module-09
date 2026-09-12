@@ -1,8 +1,8 @@
-CXX = c++ -Wall -Wextra -Werror 
+CXX = c++ -Wall -Wextra -Werror --std=c++98
 RM=rm -rf
-SOURCES = main.cpp Pmergeme.cpp
+SOURCES = main.cpp PmergeMe.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-HEADERS = Pmergeme.hpp
+HEADERS = PmergeMe.hpp
 NAME = PmergeMe
 
 

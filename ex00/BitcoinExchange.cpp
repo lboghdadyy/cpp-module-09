@@ -19,14 +19,18 @@ void	BitcoinExchange::checkVal(string &_val) {
 
 	if (*it == '-' || '+')
 		it++;
+	if (_val[0] == '.')
+		throw (std::runtime_error("Error : bad price input => " + _val));
 	for (std::string::iterator _it = it;
 		_it != _val.end();
 		_it++)
 	{
 		if (*_it == '.' && !prec)
 			prec = true;
-		else if (!std::isdigit(*_it))
+		else if (!std::isdigit(*_it)) {
+			std::cout << _val << std::endl;
 			throw (std::runtime_error("invalid btc price"));
+		}
 	}
 	val = strtod(_val.c_str(), NULL);
 	if (val < 0)
@@ -46,10 +50,10 @@ void	check_format(string &__input)
 
 void	BitcoinExchange::checkDate(string &_date)
 {
-	// vector<int>         months = {31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	string              a = "XXXX-XX-XX";
 	std::stringstream   ss(_date);
-	vector<long>        __date;
+	long				year, month, days;
+    int arr[] =  {31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 	if (_date.size() != 10)
 		badInput(_date);
@@ -60,15 +64,20 @@ void	BitcoinExchange::checkDate(string &_date)
             badInput(_date);
 	}
 	string	word;
-	while (getline(ss, word, '-'))
-		__date.push_back(strtod(word.c_str(), NULL));
-	if (__date[1] != 2 &&  (__date[1] > 12 || __date[1] < 1 || __date[2] > months[__date[1] - 1] || __date[2] < 1))
+	getline(ss, word, '-');
+	year = strtod(word.c_str(), NULL);
+	getline(ss, word, '-');
+	month = strtod(word.c_str(), NULL);
+	getline(ss, word, '-');
+	days = strtod(word.c_str(), NULL);
+
+	if (month != 2 &&  (month > 12 || month < 1 || days > arr[month - 1] || days < 1))
 		badInput(_date);
-	if (__date[1] == 2) {
+	if (month == 2) {
 		int end = 28;
-		if (isleapYear(__date[0]))
+		if (isleapYear(year))
 			end = 29;
-		if (__date[2] > end)
+		if (days > end)
             badInput(_date);
 	}
 }
@@ -142,9 +151,6 @@ void	BitcoinExchange::filltheMap(void)
 
 
 BitcoinExchange::BitcoinExchange() {
-    int arr[] =  {31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    std::vector<int> temp(arr, arr + 12);
-    this->months = temp;
 	filltheMap();
 }
 

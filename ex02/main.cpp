@@ -1,4 +1,4 @@
-# include "Pmergeme.hpp"
+# include "PmergeMe.hpp"
 
 int main(int _argCount, char **_argVector) {
     if (_argCount == 1) {
@@ -6,7 +6,9 @@ int main(int _argCount, char **_argVector) {
         return (1);
     }
     try {
-        Pmergeme obj(_argVector, _argCount);
+        PmergeMe obj(_argVector, _argCount);
+		obj.sort();
+
     }
     catch(const std::exception& e) {
         std::cerr << e.what() << '\n';
