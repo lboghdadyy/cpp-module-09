@@ -1,12 +1,12 @@
 # ifndef PmergeMe_HPP
 # define PmergeMe_HPP
 
-#include <cstddef>
 # include <vector>
 # include <deque>
 # include <iostream>
 # include <algorithm>
-#include <utility>
+# include <sys/time.h>
+# include <iomanip>
 
 using std::deque;
 using std::pair;
@@ -33,7 +33,5 @@ class PmergeMe
         void    insertLosersDeque(deque<int> &winners, deque<int> losers);
         void    insertLosersVector(vector<int> &winners, vector<int> losers);
 };
-
-
 
 # endif

@@ -1,13 +1,26 @@
 # include "PmergeMe.hpp"
 
-void	PmergeMe::sort(void) {
+double getTime() {
+    struct timeval tv;
+    if (gettimeofday(&tv, NULL) == -1) {
+        std::cerr << "gettimeofday failed" << std::endl;
+        return 0.0;
+    }
+    return (tv.tv_sec * 1000000.0 + tv.tv_usec);
+}
 
+void	PmergeMe::sort(void) {
+	double vectTime;
+	double duqueTime;
 	cout << "Before: ";
 	for (deque<int>::iterator it = seq.begin(); it != seq.end(); it++) {
 		cout << *it << " ";
 	}
 	cout << endl;
-	FordJohnsonDeque(seq);
+	double start = getTime();
+	FordJohnsonDeque(this->seq);
+	double end = getTime();
+	duqueTime = end - start;
 	cout << "aftre: ";
 	for (deque<int>::iterator it = seq.begin(); it != seq.end(); it++) {
 		cout << *it << " ";
@@ -18,12 +31,17 @@ void	PmergeMe::sort(void) {
 		cout << *it << " ";
 	}
 	cout << endl;
+	start = getTime();
 	FordJohnsonVector(seqVector);
+	end = getTime();
+	vectTime = end - start;
 	cout << "after: ";
 	for (vector<int>::iterator it = this->seqVector.begin(); it != this->seqVector.end(); it++) {
 		cout << *it << " ";
 	}
 	cout << endl;
+	cout << "Time to process a range of " << seq.size() << " elements with std::deque : " << std::fixed << std::setprecision(5) << duqueTime << " us" << endl; 
+	cout << "Time to process a range of " << seq.size() << " elements with std::vector : "  << std::fixed << std::setprecision(5) << vectTime << " us" << endl; 
 }
 
 PmergeMe::PmergeMe(){
@@ -128,20 +146,16 @@ void    PmergeMe::insertLosersVector(vector<int> &winners, vector<int> losers) {
     vector<int>::iterator it = std::lower_bound(winners.begin(), winners.end(), losers[0]);
     vector<int>  jacobbb;
     winners.insert(it, losers[0]);
-    if (losers.size() == 1) {
-        return ;
-    }
     jacobbb = insertingOrderVector(losers.size());
     for (size_t i = 0; i < jacobbb.size(); i++) {
         if (static_cast<size_t>(jacobbb[i]) >= losers.size())
             continue;
         vector<int>::iterator itt = std::lower_bound(winners.begin(), winners.end(), losers[jacobbb[i]]);
-		if (itt != winners.end())
-        	winners.insert(itt, losers[jacobbb[i]]);        
+		winners.insert(itt, losers[jacobbb[i]]);
     }
 }
 
-void PmergeMe::                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           FordJohnsonDeque(deque<int> &sequence)
+void PmergeMe::FordJohnsonDeque(deque<int> &sequence)
 {
 	int struggeler = -1;
     if (sequence.size() <= 1)

@@ -40,8 +40,7 @@ void	BitcoinExchange::checkVal(string &_val) {
 }
 
 
-void	check_format(string &__input)
-{
+void	check_format(string &__input) {
 	size_t pos = __input.find(" | ", 0);
 
 	if (pos == std::string::npos || __input.find(" | ", pos + 1) != std::string::npos)

@@ -1,6 +1,6 @@
 CXX = c++ -Wall -Wextra -Werror --std=c++98
 RM=rm -rf
-SOURCES = main.cpp 
+SOURCES = main.cpp RPN.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
 NAME = RPN
