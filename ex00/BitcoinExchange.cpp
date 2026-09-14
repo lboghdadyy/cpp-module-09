@@ -49,10 +49,10 @@ void	check_format(string &__input) {
 
 void	BitcoinExchange::checkDate(string &_date)
 {
-	string              a = "XXXX-XX-XX";
-	std::stringstream   ss(_date);
+	string				a = "XXXX-XX-XX";
+	std::stringstream	ss(_date);
 	long				year, month, days;
-    int arr[] =  {31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int 				arr[] = {31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 	if (_date.size() != 10)
 		badInput(_date);
@@ -60,7 +60,7 @@ void	BitcoinExchange::checkDate(string &_date)
 		it != _date.end() || _it != a.end();
 		it++, _it++) {
 		if ((*_it == 'X' && !std::isdigit(*it)) || (*_it != 'X' && *_it != *it))
-            badInput(_date);
+			badInput(_date);
 	}
 	string	word;
 	getline(ss, word, '-');
@@ -69,7 +69,6 @@ void	BitcoinExchange::checkDate(string &_date)
 	month = strtod(word.c_str(), NULL);
 	getline(ss, word, '-');
 	days = strtod(word.c_str(), NULL);
-
 	if (month != 2 &&  (month > 12 || month < 1 || days > arr[month - 1] || days < 1))
 		badInput(_date);
 	if (month == 2) {
@@ -117,7 +116,14 @@ void	BitcoinExchange::proccedsTheExchange(const char *_inputfile)
 		if (it == _dataBase.end()) {
 			it = _dataBase.lower_bound(date);
 			if (it != _dataBase.end())
+			{
+				if (it != _dataBase.begin() && (*it).first > date)
+					it--;
+				cout << (*it).first << std::endl;
 				cout << date << " => " << coins << " = " << it->second * strtod(coins.c_str(), NULL) << std::endl;
+			}
+			else
+				cout << date << " => " << coins << " = " << (--it)->second * strtod(coins.c_str(), NULL) << std::endl;
 		}
 		else
 			cout << date << " => " << coins << " = " << it->second * strtod(coins.c_str(), NULL) << std::endl;

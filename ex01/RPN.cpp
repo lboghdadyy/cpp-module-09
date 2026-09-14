@@ -19,8 +19,8 @@ void	RPN::calculateExpression(const char *input)
 {
 	stringstream	ss(input);
 	string			word;
-	long			res = 0;
-	long			top = 0;
+	float			res = 0;
+	float			top = 0;
 
 	while (ss >> word) {
 		if (word.size() == 1 && isdigit(word[0]))

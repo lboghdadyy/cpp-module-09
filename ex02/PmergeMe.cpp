@@ -40,8 +40,8 @@ void	PmergeMe::sort(void) {
 		cout << *it << " ";
 	}
 	cout << endl;
-	cout << "Time to process a range of " << seq.size() << " elements with std::deque : " << std::fixed << std::setprecision(5) << duqueTime << " us" << endl; 
-	cout << "Time to process a range of " << seq.size() << " elements with std::vector : "  << std::fixed << std::setprecision(5) << vectTime << " us" << endl; 
+	cout << "Time to process a range of " << seq.size() << " elements with std::deque : " << std::fixed << std::setprecision(5) << duqueTime << " us" << endl;
+	cout << "Time to process a range of " << seq.size() << " elements with std::vector : "  << std::fixed << std::setprecision(5) << vectTime << " us" << endl;
 }
 
 PmergeMe::PmergeMe(){
@@ -124,14 +124,9 @@ vector<int> insertingOrderVector(size_t size) {
 void    PmergeMe::insertLosersDeque(deque<int> &winners, deque<int> losers) {
 	if (losers.empty())
 		return ;
-    deque<int>::iterator it = std::lower_bound(winners.begin(), winners.end(), losers[0]);
-    deque<int>  jacobbb;
-    winners.insert(it, losers[0]);
-    if (losers.size() == 1) {
-        return ;
-    }
-    jacobbb = insertingOrder(losers.size());
-    for (size_t i = 0; i < jacobbb.size(); i++) {
+	deque<int> jacobbb = insertingOrder(losers.size());
+    winners.insert(winners.begin(), losers[0]);
+    for (size_t i = 0; i < jacobbb.size(); i++)  {
         if (static_cast<size_t>(jacobbb[i]) >= losers.size())
             continue;
         deque<int>::iterator itt = std::lower_bound(winners.begin(), winners.end(), losers[jacobbb[i]]);
@@ -143,9 +138,8 @@ void    PmergeMe::insertLosersDeque(deque<int> &winners, deque<int> losers) {
 void    PmergeMe::insertLosersVector(vector<int> &winners, vector<int> losers) {
 	if (losers.empty())
 		return ;
-    vector<int>::iterator it = std::lower_bound(winners.begin(), winners.end(), losers[0]);
     vector<int>  jacobbb;
-    winners.insert(it, losers[0]);
+    winners.insert(winners.begin(), losers[0]);
     jacobbb = insertingOrderVector(losers.size());
     for (size_t i = 0; i < jacobbb.size(); i++) {
         if (static_cast<size_t>(jacobbb[i]) >= losers.size())
@@ -155,46 +149,116 @@ void    PmergeMe::insertLosersVector(vector<int> &winners, vector<int> losers) {
     }
 }
 
+void	mergeSortVector(vector<pair<int, int> > &pairs, int low, int mid, int high) {
+	int	lowPartLen = mid - low + 1, highPartlen = high - mid;
+	vector<pair<int, int> > lowPart(lowPartLen), highPart(highPartlen);
+	
+	for (int i = low, j = 0; j < lowPartLen ; i++, j++)
+		lowPart[j] = pairs[i];
+	for (int i = mid + 1, j = 0; j < highPartlen; i++, j++)
+		highPart[j] = pairs[i];
+	int lIndex = 0, hIndex = 0, index = low;
+	while (lIndex < lowPartLen && hIndex < highPartlen) {
+		if (lowPart[lIndex].second > highPart[hIndex].second) {
+			pairs[index] = highPart[hIndex];
+			hIndex++;
+		}
+		else {
+			pairs[index] = lowPart[lIndex];
+			lIndex++;
+		}
+		index++; 
+	}
+	while (lIndex < lowPartLen)
+		pairs[index++] = lowPart[lIndex++];
+	while (hIndex < highPartlen)
+		pairs[index++] = highPart[hIndex++];	
+}
+
+void	mergeSort(deque<pair<int, int> > &pairs, int low, int mid, int high) {
+	int	lowPartLen = mid - low + 1, highPartlen = high - mid;
+	deque<pair<int, int> > lowPart(lowPartLen), highPart(highPartlen);
+	
+	for (int i = low, j = 0; j < lowPartLen ; i++, j++)
+		lowPart[j] = pairs[i];
+	for (int i = mid + 1, j = 0; j < highPartlen; i++, j++)
+		highPart[j] = pairs[i];
+	int lIndex = 0, hIndex = 0, index = low;
+	while (lIndex < lowPartLen && hIndex < highPartlen) {
+		if (lowPart[lIndex].second > highPart[hIndex].second) {
+			pairs[index] = highPart[hIndex];
+			hIndex++;
+		}
+		else {
+			pairs[index] = lowPart[lIndex];
+			lIndex++;
+		}
+		index++; 
+	}
+	while (lIndex < lowPartLen)
+		pairs[index++] = lowPart[lIndex++];
+	while (hIndex < highPartlen)
+		pairs[index++] = highPart[hIndex++];	
+}
+
+void	DevidPairs(deque<pair<int, int> > &pairs, int low, int high) {
+	if (low < high) {
+		int mid = low + (high - low) / 2;
+		DevidPairs(pairs, low, mid);
+		DevidPairs(pairs, mid + 1, high);
+		mergeSort(pairs, low, mid, high);
+	}
+}
+
+void	DevidPairsVector(vector<pair<int, int> > &pairs, int low, int high) {
+	if (low < high) {
+		int mid = low + (high - low) / 2;
+		DevidPairsVector(pairs, low, mid);
+		DevidPairsVector(pairs, mid + 1, high);
+		mergeSortVector(pairs, low, mid, high);
+	}
+}
+
 void PmergeMe::FordJohnsonDeque(deque<int> &sequence)
 {
-	int struggeler = -1;
-    if (sequence.size() <= 1)
-		return ;
-	deque<pair<int, int> > pairs;
-    deque<int> winners;
-    deque<int> losers;
-    pairs = makepairsDeque(sequence, &struggeler);
-    for (deque<pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); it++) {
-		losers.push_back(it->first);
-        winners.push_back(it->second);
-    }
-    if (struggeler != -1) {
-        losers.push_back(struggeler);
-    }
-    FordJohnsonDeque(winners);
-    insertLosersDeque(winners, losers);
-    sequence.swap(winners);
+	deque<pair <int, int> > pairs;
+	deque<int>	mainChain, pendingChain;
+
+	for (size_t index = 0; index < sequence.size() - 1; index += 2)
+		pairs.push_back(make_pair(sequence[index], sequence[index + 1]));
+	for (deque<pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); it++)
+		if (it->first > it->second)
+			swap(it->first, it->second);
+	DevidPairs(pairs, 0, pairs.size() - 1);
+	for (deque<pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); it++) {
+		mainChain.push_back(it->second);
+		pendingChain.push_back(it->first);
+	}
+	if (sequence.size() % 2 != 0)
+		pendingChain.push_back(sequence.back());
+	insertLosersDeque(mainChain, pendingChain);
+	sequence.swap(mainChain);
 }
 
 void PmergeMe::FordJohnsonVector(vector<int> &sequence)
 {
-	int struggeler = -1;
-    if (sequence.size() <= 1)
-        return ;
-    vector<pair<int, int> > pairs;
-    vector<int> winners;
-    vector<int> losers;
-    pairs = makepairsVector(sequence, &struggeler);
-    for (vector<pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); it++) {
-		losers.push_back(it->first);
-        winners.push_back(it->second);
-    }
-    if (struggeler != -1) {
-        losers.push_back(struggeler);
-    }
-    FordJohnsonVector(winners);
-    insertLosersVector(winners, losers);
-    sequence.swap(winners);
+	vector<pair <int, int> > pairs;
+	vector<int>	mainChain, pendingChain;
+
+	for (size_t index = 0; index < sequence.size() - 1; index += 2)
+		pairs.push_back(make_pair(sequence[index], sequence[index + 1]));
+	for (vector<pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); it++)
+		if (it->first > it->second)
+			swap(it->first, it->second);
+	DevidPairsVector(pairs, 0, pairs.size() - 1);
+	for (vector<pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); it++) {
+		mainChain.push_back(it->second);
+		pendingChain.push_back(it->first);
+	}
+	if (sequence.size() % 2 != 0)
+		pendingChain.push_back(sequence.back());
+	insertLosersVector(mainChain, pendingChain);
+	sequence.swap(mainChain);
 }
 
 

@@ -19,7 +19,7 @@ using std::endl;
 class RPN
 {
 	private:
-		stack<int>	myStack;
+		stack<float>	myStack;
 		long		total;
 	public:
 		RPN();
