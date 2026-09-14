@@ -1,4 +1,4 @@
-CXX = c++ -Wall -Wextra -Werror --std=c++98
+CXX = c++ -Wall -Wextra -Werror 
 RM=rm -rf
 SOURCES = main.cpp PmergeMe.cpp
 OBJECTS = $(SOURCES:.cpp=.o)

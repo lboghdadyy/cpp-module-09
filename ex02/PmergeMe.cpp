@@ -86,19 +86,20 @@ vector<pair<int, int> >   PmergeMe::makepairsVector(vector<int> seq, int *strug)
 deque<int> insertingOrder(size_t size) {
 	deque<int> order;
 
-    int j1 = 1;
-    int j2 = 0;
+    int prev = 1;
+    int prevPrev = 0;
 
     order.push_back(1);
 
     while (order.size() < size)
     {
-        int jacob = j1 + 2 * j2;
-        for (int i = jacob; i > j1; --i) {
-            order.push_back(i);
+        int jacob = prev + 2 * prevPrev;
+        for (int i = jacob; i > prev; --i) {
+			if (static_cast<size_t>(i) <= size)
+            	order.push_back(i);
         }
-        j2 = j1;
-        j1 = jacob;
+        prevPrev = prev;
+        prev = jacob;
     }
     return (order);
 }
@@ -113,7 +114,8 @@ vector<int> insertingOrderVector(size_t size) {
     {
         int jacob = j1 + 2 * j2;
         for (int i = jacob; i > j1; --i) {
-            order.push_back(i);
+            if (static_cast<size_t>(i) <= size)
+            	order.push_back(i);
         }
         j2 = j1;
         j1 = jacob;
@@ -124,8 +126,8 @@ vector<int> insertingOrderVector(size_t size) {
 void    PmergeMe::insertLosersDeque(deque<int> &winners, deque<int> losers) {
 	if (losers.empty())
 		return ;
+	winners.insert(winners.begin(), losers[0]);
 	deque<int> jacobbb = insertingOrder(losers.size());
-    winners.insert(winners.begin(), losers[0]);
     for (size_t i = 0; i < jacobbb.size(); i++)  {
         if (static_cast<size_t>(jacobbb[i]) >= losers.size())
             continue;
@@ -261,11 +263,21 @@ void PmergeMe::FordJohnsonVector(vector<int> &sequence)
 	sequence.swap(mainChain);
 }
 
+int	check(const std::string &val) {
+	for (std::string::const_iterator it = val.begin(); it != val.end(); it++) {
+		if (!isdigit(*it))
+			return (1);
+	}
+	return (0);
+}
 
 PmergeMe::PmergeMe(char **input, size_t size) 
 {
     for (size_t _index = 1; _index < size; _index++) {
-        long ll = strtod(input[_index], NULL);
+		if (check(input[_index])) {
+			throw(std::runtime_error("Error : invalid input => \"" + std::string(input[_index]) + "\""));
+		}
+		long ll = strtod(input[_index], NULL);
         if (ll <= 0 || ll > 2147483647)
             throw (std::runtime_error("Error"));
         else {
